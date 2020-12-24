@@ -3,6 +3,7 @@ package org.prebid.server.it;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import com.iab.gdpr.consent.VendorConsentEncoder;
 import com.iab.gdpr.consent.implementation.v1.VendorConsentBuilder;
 import com.iab.gdpr.consent.range.StartEndRangeEntry;
@@ -76,6 +77,18 @@ public class ApplicationTest extends IntegrationTest {
             .build();
 
     @Test
+    public void test() throws IOException {
+        final String value = jsonFrom(
+                "openrtb2/rubicon_appnexus/test-cache-rubicon-appnexus-request.json");
+
+        final StringValuePattern stringValuePattern = equalToJson(value, true, false);
+
+        assertThat(stringValuePattern
+                .match(jsonFrom("openrtb2/rhythmone/failed.json"))
+                .isExactMatch()).isTrue();
+    }
+
+    @Test
     public void openrtb2AuctionShouldRespondWithBidsFromRubiconAndAppnexus() throws IOException, JSONException {
         // given
         // rubicon bid response for imp 1
@@ -132,7 +145,8 @@ public class ApplicationTest extends IntegrationTest {
                 "openrtb2/rubicon_appnexus/test-auction-rubicon-appnexus-response.json",
                 response, asList(RUBICON, APPNEXUS, APPNEXUS_ALIAS));
 
-        JSONAssert.assertEquals(expectedAuctionResponse, response.asString(), openrtbCacheDebugComparator());
+        final String actualStr = response.asString();
+        JSONAssert.assertEquals(expectedAuctionResponse, actualStr, openrtbCacheDebugComparator());
     }
 
     @Test

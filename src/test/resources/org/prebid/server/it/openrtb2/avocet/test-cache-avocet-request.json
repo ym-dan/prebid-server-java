@@ -5,17 +5,17 @@
       "value": {
         "id": "7706636740145184841",
         "impid": "test-imp-banner-id",
+        "api": 1,
         "price": 0.500000,
         "adid": "29681110",
-        "adm": "some-test-ad",
         "adomain": [
           "advertsite.com"
         ],
         "cid": "772",
-        "crid": "29681110",
-        "api": 1,
         "h": 576,
+        "crid": "29681110",
         "w": 1024,
+        "adm": "some-test-ad",
         "ext": {
           "avocet": {
             "duration": 30

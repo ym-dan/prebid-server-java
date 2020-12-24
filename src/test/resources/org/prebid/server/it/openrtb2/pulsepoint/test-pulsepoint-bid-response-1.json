@@ -1,29 +1,138 @@
-{
-  "id": "bidResponseId8",
-  "seatbid": [
-    {
-      "bid": [
-        {
-          "id": "bidId01",
-          "impid": "impId8",
-          "price": 4.75,
-          "adm": "adm8",
-          "crid": "crid8",
-          "w": 300,
-          "h": 250
-        },
-        {
-          "id": "bidId02",
-          "impid": "impId81",
-          "price": 3.75,
-          "adm": "adm81",
-          "crid": "crid81",
-          "w": 120,
-          "h": 180
+[
+  {
+    "op": "move",
+    "from": "/puts/0",
+    "path": "/puts/6"
+  },
+  {
+    "op": "move",
+    "from": "/puts/0",
+    "path": "/puts/7"
+  },
+  {
+    "op": "remove",
+    "path": "/puts/0",
+    "value": {
+      "type": "json",
+      "value": {
+        "id": "7706636740145184841",
+        "impid": "impId3",
+        "price": 5.5,
+        "adm": "some-test-ad",
+        "adid": "29681110",
+        "adomain": [
+          "appnexus.com"
+        ],
+        "iurl": "http://nym1-ib.adnxs.com/cr?id=29681110",
+        "cid": "958",
+        "crid": "29681110",
+        "w": 300,
+        "h": 250,
+        "wurl": "http://localhost:8080/event?t=win&b=7706636740145184841&a=5001&ts=1000&bidder=appnexus&f=i&int=dmbjs",
+        "ext": {
+          "appnexus": {
+            "brand_id": 1,
+            "auction_id": 8189378542222915032,
+            "bidder_id": 2,
+            "bid_ad_type": 0,
+            "ranking_price": 0.0
+          }
         }
-      ],
-      "seat": "seatId8",
-      "group": 0
+      }
     }
-  ]
-}
+  },
+  {
+    "op": "move",
+    "from": "/puts/0",
+    "path": "/puts/5"
+  },
+  {
+    "op": "replace",
+    "path": "/puts/1/value/id",
+    "value": "7706636740145184841"
+  },
+  {
+    "op": "replace",
+    "path": "/puts/1/value/impid",
+    "value": "impId3"
+  },
+  {
+    "op": "replace",
+    "path": "/puts/1/value/crid",
+    "value": "29681110"
+  },
+  {
+    "op": "replace",
+    "path": "/puts/1/value/price",
+    "value": 5.5
+  },
+  {
+    "op": "replace",
+    "path": "/puts/1/value/wurl",
+    "value": "http://localhost:8080/event?t=win&b=7706636740145184841&a=5001&ts=1000&bidder=appnexus&f=i&int=dmbjs"
+  },
+  {
+    "op": "add",
+    "path": "/puts/1/value/adm",
+    "value": "some-test-ad"
+  },
+  {
+    "op": "add",
+    "path": "/puts/1/value/adid",
+    "value": "29681110"
+  },
+  {
+    "op": "add",
+    "path": "/puts/1/value/adomain",
+    "value": [
+      "appnexus.com"
+    ]
+  },
+  {
+    "op": "add",
+    "path": "/puts/1/value/iurl",
+    "value": "http://nym1-ib.adnxs.com/cr?id=29681110"
+  },
+  {
+    "op": "add",
+    "path": "/puts/1/value/cid",
+    "value": "958"
+  },
+  {
+    "op": "add",
+    "path": "/puts/1/value/w",
+    "value": 300
+  },
+  {
+    "op": "add",
+    "path": "/puts/1/value/h",
+    "value": 250
+  },
+  {
+    "op": "add",
+    "path": "/puts/1/value/ext",
+    "value": {
+      "appnexus": {
+        "brand_id": 1,
+        "auction_id": 8189378542222915032,
+        "bidder_id": 2,
+        "bid_ad_type": 0,
+        "ranking_price": 0.0
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/puts/5",
+    "value": {
+      "type": "json",
+      "value": {
+        "id": "a121a07f-1579-4465-bc5e-5c5b02a0c421",
+        "impid": "impStoredAuctionResponse",
+        "price": 0.9,
+        "crid": "crid1",
+        "wurl": "http://localhost:8080/event?t=win&b=a121a07f-1579-4465-bc5e-5c5b02a0c421&a=5001&ts=1000&bidder=appnexus&f=i&int=dmbjs"
+      }
+    }
+  }
+]
