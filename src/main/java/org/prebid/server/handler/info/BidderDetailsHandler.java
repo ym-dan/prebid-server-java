@@ -1,5 +1,6 @@
 package org.prebid.server.handler.info;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.netty.handler.codec.http.HttpHeaderValues;
@@ -110,12 +111,17 @@ public class BidderDetailsHandler implements Handler<RoutingContext> {
     @Value
     private static class BidderInfoResponseModel {
 
+        @JsonProperty("usesHttps")
+        boolean usesHttps;
+
         BidderInfo.MaintainerInfo maintainer;
 
         BidderInfo.CapabilitiesInfo capabilities;
 
         static BidderInfoResponseModel from(BidderInfo bidderInfo) {
-            return new BidderInfoResponseModel(bidderInfo.getMaintainer(), bidderInfo.getCapabilities());
+            return new BidderInfoResponseModel(bidderInfo.isUsesHttps(),
+                    bidderInfo.getMaintainer(),
+                    bidderInfo.getCapabilities());
         }
     }
 }

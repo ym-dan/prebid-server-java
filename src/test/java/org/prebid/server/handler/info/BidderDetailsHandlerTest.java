@@ -128,7 +128,7 @@ public class BidderDetailsHandlerTest extends VertxTest {
 
         // then
         verify(httpResponse).end(
-                eq("{\"maintainer\":{\"email\":\"test@email.org\"},\"capabilities\":{\"app\":"
+                eq("{\"usesHttps\":true,\"maintainer\":{\"email\":\"test@email.org\"},\"capabilities\":{\"app\":"
                         + "{\"mediaTypes\":[\"mediaType1\"]},\"site\":{\"mediaTypes\":[\"mediaType2\"]}}}"));
     }
 
@@ -142,7 +142,7 @@ public class BidderDetailsHandlerTest extends VertxTest {
 
         // then
         verify(httpResponse).end(
-                eq("{\"maintainer\":{\"email\":\"test@email.org\"},\"capabilities\":{\"app\":"
+                eq("{\"usesHttps\":true,\"maintainer\":{\"email\":\"test@email.org\"},\"capabilities\":{\"app\":"
                         + "{\"mediaTypes\":[\"mediaType1\"]},\"site\":{\"mediaTypes\":[\"mediaType2\"]}},"
                         + "\"aliasOf\":\"bidderName1\"}"));
     }
@@ -151,21 +151,21 @@ public class BidderDetailsHandlerTest extends VertxTest {
     public void shouldRespondWithExpectedBodyForAllQueryParam() {
         // given
         given(httpRequest.getParam(anyString())).willReturn("all");
-
         // when
         handler.handle(routingContext);
 
         // then
         verify(httpResponse).end(
-                eq("{\"bidderAlias1\":{\"maintainer\":{\"email\":\"test@email.org\"},\"capabilities\":"
-                        + "{\"app\":{\"mediaTypes\":[\"mediaType1\"]},\"site\":{\"mediaTypes\":[\"mediaType2\"]}},"
-                        + "\"aliasOf\":\"bidderName1\"},"
-                        + "\"bidderName1\":{\"maintainer\":{\"email\":\"test@email.org\"},\"capabilities\":"
-                        + "{\"app\":{\"mediaTypes\":[\"mediaType1\"]},\"site\":{\"mediaTypes\":[\"mediaType2\"]}}}}"));
+                eq("{\"bidderAlias1\":{\"usesHttps\":true,\"maintainer\":{\"email\":\"test@email.org\"},"
+                        + "\"capabilities\":{\"app\":{\"mediaTypes\":[\"mediaType1\"]},\"site\":{\"mediaTypes\":"
+                        + "[\"mediaType2\"]}},\"aliasOf\":\"bidderName1\"},"
+                        + "\"bidderName1\":{\"usesHttps\":true,\"maintainer\":{\"email\":\"test@email.org\"},"
+                        + "\"capabilities\":{\"app\":{\"mediaTypes\":[\"mediaType1\"]},\"site\":{\"mediaTypes\":"
+                        + "[\"mediaType2\"]}}}}"));
     }
 
     private static BidderInfo givenBidderInfo() {
-        return BidderInfo.create(true, "test@email.org", singletonList("mediaType1"),
+        return BidderInfo.create(true, "https://endpoint.com", "test@email.org", singletonList("mediaType1"),
                 singletonList("mediaType2"), null, 0, true, true, false);
     }
 }

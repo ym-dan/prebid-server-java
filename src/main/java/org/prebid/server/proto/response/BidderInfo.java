@@ -10,6 +10,8 @@ public class BidderInfo {
 
     boolean enabled;
 
+    boolean usesHttps;
+
     MaintainerInfo maintainer;
 
     CapabilitiesInfo capabilities;
@@ -22,16 +24,24 @@ public class BidderInfo {
 
     boolean modifyingVastXmlAllowed;
 
-    public static BidderInfo create(boolean enabled, String maintainerEmail, List<String> appMediaTypes,
-                                    List<String> siteMediaTypes, List<String> supportedVendors, int vendorId,
+    public static BidderInfo create(boolean enabled, String endpoint, String maintainerEmail,
+                                    List<String> appMediaTypes, List<String> siteMediaTypes,
+                                    List<String> supportedVendors, int vendorId,
                                     boolean enforceGdpr, boolean ccpaEnforced, boolean modifyingVastXmlAllowed) {
+        final boolean usesHttps = endpoint.startsWith("https://");
         final MaintainerInfo maintainer = new MaintainerInfo(maintainerEmail);
         final CapabilitiesInfo capabilities = new CapabilitiesInfo(platformInfo(appMediaTypes),
                 platformInfo(siteMediaTypes));
         final GdprInfo gdpr = new GdprInfo(vendorId, enforceGdpr);
 
-        return new BidderInfo(
-                enabled, maintainer, capabilities, supportedVendors, gdpr, ccpaEnforced, modifyingVastXmlAllowed);
+        return new BidderInfo(enabled,
+                usesHttps,
+                maintainer,
+                capabilities,
+                supportedVendors,
+                gdpr,
+                ccpaEnforced,
+                modifyingVastXmlAllowed);
     }
 
     private static PlatformInfo platformInfo(List<String> mediaTypes) {
