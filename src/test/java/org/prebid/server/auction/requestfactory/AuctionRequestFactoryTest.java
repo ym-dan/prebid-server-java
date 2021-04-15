@@ -115,6 +115,8 @@ public class AuctionRequestFactoryTest extends VertxTest {
                 .will(invocationOnMock -> invocationOnMock.getArgument(0));
         given(interstitialProcessor.process(any()))
                 .will(invocationOnMock -> invocationOnMock.getArgument(0));
+        given(ortb2RequestFactory.fetchAccountIfAbsent(any(), any(), any(), any()))
+                .will(invocationOnMock -> Future.succeededFuture(invocationOnMock.getArgument(0)));
 
         given(privacyEnforcementService.contextFromBidRequest(any()))
                 .willReturn(Future.succeededFuture(defaultPrivacyContext));
@@ -375,6 +377,23 @@ public class AuctionRequestFactoryTest extends VertxTest {
         assertThat(future.failed()).isTrue();
         assertThat(future.cause()).isInstanceOf(InvalidRequestException.class);
         assertThat(((InvalidRequestException) future.cause()).getMessages()).containsOnly("errors");
+    }
+
+    @Test
+    public void shouldUseFetchedAccountIdByOrtb2RequestFactoryWhenAccountWasEmpty() {
+        // given
+        givenValidBidRequest();
+
+        final Account modifiedAccount = Account.builder().id("modifiedId").build();
+        given(ortb2RequestFactory.fetchAccountIfAbsent(any(), any(), any(), any()))
+                .willReturn(Future.succeededFuture(modifiedAccount));
+
+        // when
+        target.fromRequest(routingContext, 0L);
+
+        // then
+        verify(storedRequestProcessor).processStoredRequests(eq(ACCOUNT_ID), any());
+        verify(ortb2RequestFactory).enrichBidRequestWithAccountAndPrivacyData(any(), eq(modifiedAccount), any());
     }
 
     @Test

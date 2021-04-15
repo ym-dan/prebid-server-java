@@ -84,6 +84,13 @@ public class AuctionRequestFactory {
                 .compose(auctionContext -> updateBidRequest(auctionContext)
                         .map(auctionContext::with))
 
+                .compose(auctionContext -> ortb2RequestFactory.fetchAccountIfAbsent(
+                        auctionContext.getAccount(),
+                        auctionContext.getBidRequest(),
+                        auctionContext.getRoutingContext(),
+                        auctionContext.getTimeout())
+                        .map(auctionContext::with))
+
                 .compose(auctionContext -> privacyEnforcementService.contextFromBidRequest(auctionContext)
                         .map(auctionContext::with))
 

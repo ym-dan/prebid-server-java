@@ -415,8 +415,7 @@ public class Ortb2RequestFactoryTest extends VertxTest {
 
         // when
         final Future<AuctionContext> future = target.fetchAccountAndCreateAuctionContext(routingContext, bidRequest,
-                metricName,
-                startTime, errors);
+                metricName, startTime, errors);
 
         // then
         verify(timeoutResolver).resolve(tmax);
@@ -438,6 +437,51 @@ public class Ortb2RequestFactoryTest extends VertxTest {
                 .build();
         assertThat(future.succeeded()).isTrue();
         assertThat(future.result()).isEqualTo(expectedAuctionContext);
+    }
+
+    @Test
+    public void fetchAccountIfAbsentShouldReturnSameAccountIfAccountIsNotEmpty() {
+        // given
+        final Account account = Account.builder()
+                .id("accountId")
+                .bannerCacheTtl(100)
+                .build();
+
+        // when
+        final Future<Account> result = target.fetchAccountIfAbsent(account, defaultBidRequest, routingContext, timeout);
+
+        // then
+        verifyZeroInteractions(applicationSettings);
+
+        assertThat(result.result()).isEqualTo(account);
+    }
+
+    @Test
+    public void fetchAccountIfAbsentShouldReturnAccountFetchedByApplicationSettingsWhenAccountIsEmpty() {
+        // given
+        final Account account = Account.empty("accountId");
+        final String newAccountId = "newAccountId";
+        final Account fetchedAccount = Account.builder()
+                .id(newAccountId)
+                .bannerCacheTtl(100)
+                .build();
+
+        final BidRequest bidRequest = BidRequest.builder()
+                .app(App.builder()
+                        .publisher(Publisher.builder().id(newAccountId).build())
+                        .build())
+                .build();
+
+        given(applicationSettings.getAccountById(any(), any()))
+                .willReturn(Future.succeededFuture(fetchedAccount));
+
+        // when
+        final Future<Account> result = target.fetchAccountIfAbsent(account, bidRequest, routingContext, timeout);
+
+        // then
+        verify(applicationSettings).getAccountById(newAccountId, timeout);
+
+        assertThat(result.result()).isEqualTo(fetchedAccount);
     }
 
     @Test

@@ -38,6 +38,8 @@ public class Account {
     @JsonProperty("cookie-sync")
     AccountCookieSyncConfig cookieSync;
 
+    Boolean isEmpty;
+
     public Account merge(Account another) {
         return Account.builder()
                 .id(ObjectUtils.defaultIfNull(id, another.id))
@@ -55,12 +57,14 @@ public class Account {
                 .bidValidations(ObjectUtils.defaultIfNull(bidValidations, another.bidValidations))
                 .status(ObjectUtils.defaultIfNull(status, another.status))
                 .cookieSync(ObjectUtils.defaultIfNull(cookieSync, another.cookieSync))
+                .isEmpty(another.isEmpty)
                 .build();
     }
 
     public static Account empty(String id) {
         return Account.builder()
                 .id(id)
+                .isEmpty(true)
                 .build();
     }
 }

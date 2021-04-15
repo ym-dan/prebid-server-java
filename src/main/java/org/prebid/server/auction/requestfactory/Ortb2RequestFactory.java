@@ -12,6 +12,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.prebid.server.auction.TimeoutResolver;
@@ -92,6 +93,16 @@ public class Ortb2RequestFactory {
                         .prebidErrors(errors)
                         .debugWarnings(new ArrayList<>())
                         .build());
+    }
+
+    public Future<Account> fetchAccountIfAbsent(Account account,
+                                                BidRequest bidRequest,
+                                                RoutingContext routingContext,
+                                                Timeout timeout) {
+
+        return account == null || BooleanUtils.isTrue(account.getIsEmpty())
+                ? accountFrom(bidRequest, timeout, routingContext)
+                : Future.succeededFuture(account);
     }
 
     /**

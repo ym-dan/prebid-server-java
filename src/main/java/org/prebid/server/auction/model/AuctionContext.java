@@ -51,4 +51,10 @@ public class AuctionContext {
                 .geoInfo(privacyContext.getTcfContext().getGeoInfo())
                 .build();
     }
+
+    public AuctionContext with(Account account) {
+        return this.toBuilder()
+                .account(account)
+                .build();
+    }
 }
