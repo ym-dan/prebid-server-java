@@ -16,7 +16,6 @@ import org.prebid.server.exception.PreBidException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -82,7 +81,7 @@ public class ForceDealsUpdateHandlerTest {
         verify(httpRequest).getParam(eq(ACTION_NAME_PARAM));
 
         verify(httpResponse).setStatusCode(eq(400));
-        verify(httpResponse).end(startsWith(String.format("Given '%s' parameter value is not among possible actions "
+        verify(httpResponse).end(eq(String.format("Given '%s' parameter value is not among possible actions "
                 + "'[UPDATE_LINE_ITEMS, SEND_REPORT]'", ACTION_NAME_PARAM)));
     }
 
@@ -128,7 +127,7 @@ public class ForceDealsUpdateHandlerTest {
 
         // then
         verify(httpResponse).setStatusCode(eq(500));
-        verify(httpResponse).end(startsWith(exceptionMessage));
+        verify(httpResponse).end(eq(exceptionMessage));
     }
 
     @Test
@@ -143,6 +142,6 @@ public class ForceDealsUpdateHandlerTest {
 
         // then
         verify(httpResponse).setStatusCode(eq(500));
-        verify(httpResponse).end(startsWith(exceptionMessage));
+        verify(httpResponse).end(eq(exceptionMessage));
     }
 }
