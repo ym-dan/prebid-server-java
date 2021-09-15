@@ -52,7 +52,8 @@ public class ForceDealsUpdateHandler implements Handler<RoutingContext> {
             }
             HttpUtil.executeSafely(routingContext, endpoint,
                     response -> response
-                            .setStatusCode(HttpResponseStatus.NO_CONTENT.code()));
+                            .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
+                            .end());
         } catch (PreBidException e) {
             respondWithError(routingContext, HttpResponseStatus.INTERNAL_SERVER_ERROR, e);
         }

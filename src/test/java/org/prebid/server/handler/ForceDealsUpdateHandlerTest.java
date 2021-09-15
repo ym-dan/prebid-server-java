@@ -98,6 +98,7 @@ public class ForceDealsUpdateHandlerTest {
         verifyZeroInteractions(deliveryStatsService);
 
         verify(httpResponse).setStatusCode(eq(204));
+        verify(httpResponse).end();
     }
 
     @Test
@@ -113,6 +114,7 @@ public class ForceDealsUpdateHandlerTest {
         verifyZeroInteractions(plannerService);
 
         verify(httpResponse).setStatusCode(eq(204));
+        verify(httpResponse).end();
     }
 
     @Test
