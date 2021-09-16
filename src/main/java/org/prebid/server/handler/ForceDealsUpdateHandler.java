@@ -6,6 +6,7 @@ import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.StringUtils;
 import org.prebid.server.deals.DeliveryStatsService;
 import org.prebid.server.deals.PlannerService;
+import org.prebid.server.deals.RegisterService;
 import org.prebid.server.exception.PreBidException;
 import org.prebid.server.util.HttpUtil;
 
@@ -19,13 +20,16 @@ public class ForceDealsUpdateHandler implements Handler<RoutingContext> {
 
     private final DeliveryStatsService deliveryStatsService;
     private final PlannerService plannerService;
+    private final RegisterService registerService;
     private final String endpoint;
 
     public ForceDealsUpdateHandler(DeliveryStatsService deliveryStatsService,
                                    PlannerService plannerService,
+                                   RegisterService registerService,
                                    String endpoint) {
         this.deliveryStatsService = Objects.requireNonNull(deliveryStatsService);
         this.plannerService = Objects.requireNonNull(plannerService);
+        this.registerService = Objects.requireNonNull(registerService);
         this.endpoint = Objects.requireNonNull(endpoint);
     }
 
@@ -46,6 +50,10 @@ public class ForceDealsUpdateHandler implements Handler<RoutingContext> {
                     break;
                 case SEND_REPORT:
                     deliveryStatsService.sendDeliveryProgressReports();
+                    break;
+                case REGISTER_INSTANCE:
+                    registerService.initialize();
+                    registerService.suspend();
                     break;
                 default:
                     throw new IllegalStateException("Unexpected action value");
@@ -84,6 +92,6 @@ public class ForceDealsUpdateHandler implements Handler<RoutingContext> {
     }
 
     enum Action {
-        UPDATE_LINE_ITEMS, SEND_REPORT
+        UPDATE_LINE_ITEMS, SEND_REPORT, REGISTER_INSTANCE
     }
 }

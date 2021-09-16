@@ -7,6 +7,7 @@ import org.prebid.server.currency.CurrencyConversionService;
 import org.prebid.server.deals.DeliveryProgressService;
 import org.prebid.server.deals.DeliveryStatsService;
 import org.prebid.server.deals.PlannerService;
+import org.prebid.server.deals.RegisterService;
 import org.prebid.server.deals.simulation.DealsSimulationAdminHandler;
 import org.prebid.server.handler.AccountCacheInvalidationHandler;
 import org.prebid.server.handler.CurrencyRatesHandler;
@@ -228,6 +229,7 @@ public class AdminEndpointsConfiguration {
     CustomizedAdminEndpoint forceDealsUpdate(
             DeliveryStatsService deliveryStatsService,
             PlannerService plannerService,
+            RegisterService registerService,
             @Value("${admin-endpoints.force-deals-update.path}") String path,
             @Value("${admin-endpoints.force-deals-update.on-application-port}") boolean isOnApplicationPort,
             @Value("${admin-endpoints.force-deals-update.protected}") boolean isProtected,
@@ -235,7 +237,7 @@ public class AdminEndpointsConfiguration {
     ) {
         return new CustomizedAdminEndpoint(
                 path,
-                new ForceDealsUpdateHandler(deliveryStatsService, plannerService, path),
+                new ForceDealsUpdateHandler(deliveryStatsService, plannerService, registerService, path),
                 isOnApplicationPort,
                 isProtected)
                 .withCredentials(adminEndpointCredentials);

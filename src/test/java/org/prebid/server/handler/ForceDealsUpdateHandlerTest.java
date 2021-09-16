@@ -11,6 +11,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.prebid.server.deals.DeliveryStatsService;
 import org.prebid.server.deals.PlannerService;
+import org.prebid.server.deals.RegisterService;
 import org.prebid.server.exception.PreBidException;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -33,6 +34,8 @@ public class ForceDealsUpdateHandlerTest {
     private DeliveryStatsService deliveryStatsService;
     @Mock
     private PlannerService plannerService;
+    @Mock
+    private RegisterService registerService;
 
     private ForceDealsUpdateHandler handler;
 
@@ -45,7 +48,7 @@ public class ForceDealsUpdateHandlerTest {
 
     @Before
     public void setUp() {
-        handler = new ForceDealsUpdateHandler(deliveryStatsService, plannerService, "/endpoint");
+        handler = new ForceDealsUpdateHandler(deliveryStatsService, plannerService, registerService, "/endpoint");
 
         given(routingContext.request()).willReturn(httpRequest);
         given(routingContext.response()).willReturn(httpResponse);
@@ -82,7 +85,7 @@ public class ForceDealsUpdateHandlerTest {
 
         verify(httpResponse).setStatusCode(eq(400));
         verify(httpResponse).end(eq(String.format("Given '%s' parameter value is not among possible actions "
-                + "'[UPDATE_LINE_ITEMS, SEND_REPORT]'", ACTION_NAME_PARAM)));
+                + "'[UPDATE_LINE_ITEMS, SEND_REPORT, REGISTER_INSTANCE]'", ACTION_NAME_PARAM)));
     }
 
     @Test
@@ -95,7 +98,7 @@ public class ForceDealsUpdateHandlerTest {
 
         // then
         verify(plannerService, times(1)).updateLineItemMetaData();
-        verifyZeroInteractions(deliveryStatsService);
+        verifyZeroInteractions(deliveryStatsService, registerService);
 
         verify(httpResponse).setStatusCode(eq(204));
         verify(httpResponse).end();
@@ -111,7 +114,24 @@ public class ForceDealsUpdateHandlerTest {
 
         // then
         verify(deliveryStatsService, times(1)).sendDeliveryProgressReports();
-        verifyZeroInteractions(plannerService);
+        verifyZeroInteractions(plannerService, registerService);
+
+        verify(httpResponse).setStatusCode(eq(204));
+        verify(httpResponse).end();
+    }
+
+    @Test
+    public void shouldCallRegisterInstanceMethodWhenRegisterInstanceParamIsGiven() {
+        // given
+        given(httpRequest.getParam(any())).willReturn(ForceDealsUpdateHandler.Action.REGISTER_INSTANCE.name());
+
+        // when
+        handler.handle(routingContext);
+
+        // then
+        verify(registerService, times(1)).initialize();
+        verify(registerService, times(1)).suspend();
+        verifyZeroInteractions(plannerService, deliveryStatsService);
 
         verify(httpResponse).setStatusCode(eq(204));
         verify(httpResponse).end();
