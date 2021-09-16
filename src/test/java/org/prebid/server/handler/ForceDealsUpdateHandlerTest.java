@@ -129,8 +129,7 @@ public class ForceDealsUpdateHandlerTest {
         handler.handle(routingContext);
 
         // then
-        verify(registerService, times(1)).initialize();
-        verify(registerService, times(1)).suspend();
+        verify(registerService, times(1)).performRegistration();
         verifyZeroInteractions(plannerService, deliveryStatsService);
 
         verify(httpResponse).setStatusCode(eq(204));

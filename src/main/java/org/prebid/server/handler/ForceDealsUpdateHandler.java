@@ -52,8 +52,7 @@ public class ForceDealsUpdateHandler implements Handler<RoutingContext> {
                     deliveryStatsService.sendDeliveryProgressReports();
                     break;
                 case REGISTER_INSTANCE:
-                    registerService.initialize();
-                    registerService.suspend();
+                    registerService.performRegistration();
                     break;
                 default:
                     throw new IllegalStateException("Unexpected action value");
